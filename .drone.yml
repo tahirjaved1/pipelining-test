@@ -1,27 +1,17 @@
-kind: pipeline
-name: build
-
-trigger:
-  branch:
-  - master
-  - test3
-
-steps:
-- name: build-webapp
-  commands:
-   - ls -larth
 ---
 kind: pipeline
-name: deploy
-
-trigger:
-  branch:
-  - master
-  - test3
-
-depends_on:
-- build
+type: docker
+name: default
 
 steps:
+- name: backend
+  image: golang
   commands:
-   - cat /etc/passwd
+  - go build
+  - go test
+
+- name: frontend
+  image: node
+  commands:
+  - npm install
+  - npm run test
